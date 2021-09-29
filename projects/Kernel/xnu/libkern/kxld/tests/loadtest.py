@@ -54,7 +54,7 @@ for kext in kexts:
             print("*** kextload of %s was terminated by signal %d" % (kext, -retcode), file=sys.stderr)
         elif retcode > 0:
             print("*** kextload of %s failed with return code %d" % (kext, retcode), file=sys.stderr)
-    except OSError, e:
+    except OSError as e:
         print("Execution failed:", e, file=sys.stderr)
         sys.exit(1)
 

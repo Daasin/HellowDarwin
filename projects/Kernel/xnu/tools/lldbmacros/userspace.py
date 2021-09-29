@@ -175,7 +175,7 @@ def PrintUserspaceData(cmd_args=None, cmd_options={}):
 
     try:
         user_data_len = struct.calcsize(format_specifier_str)
-    except Exception, e:
+    except Exception as e:
         raise ArgumentError("Invalid format specifier provided.")
 
     user_data_string = GetUserDataAsString(task, uspace_addr, user_data_len)
@@ -629,7 +629,7 @@ def ShowTaskUserLibraries(cmd_args=None):
         img_data = ""
         try:
             img_data = GetUserDataAsString(task, image_info_address, image_info_size)
-        except Exception, e:
+        except Exception as e:
             debuglog("Failed to read user data for task 0x{:x} addr 0x{:x}, exception {:s}".format(task, image_info_address, str(e)))
             pass
 

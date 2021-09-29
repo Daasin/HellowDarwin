@@ -795,7 +795,7 @@ class OperatingSystemPlugIn(object):
                 self.threads.append(nth)
                 self.thread_cache[nth['tid']] = nth
                 processor_list_val = processor_list_val.GetChildMemberWithName('processor_list')
-        except KeyboardInterrupt, ke:
+        except KeyboardInterrupt as ke:
             print "OS Plugin Interrupted during thread loading process. \nWARNING:Thread registers and backtraces may not be accurate."
             return self.threads
 
@@ -815,7 +815,7 @@ class OperatingSystemPlugIn(object):
                     if cputhread['active_thread'] == nth['ptr']:
                         nth['core'] = cputhread['cpu_id']
                 self.threads.append( nth )
-        except KeyboardInterrupt, ke:
+        except KeyboardInterrupt as ke:
             print "OS Plugin Interrupted during thread loading process. \nWARNING:Thread registers and backtraces may not be accurate."
             return self.threads
         # end legacy code
@@ -872,7 +872,7 @@ class OperatingSystemPlugIn(object):
                 regs.ReadRegisterDataFromContinuation( PluginValue(thobj).GetChildMemberWithName('continuation').GetValueAsAddress())
                 return regs.GetPackedRegisterState()
             #incase we failed very miserably
-        except KeyboardInterrupt, ke:
+        except KeyboardInterrupt as ke:
             print "OS Plugin Interrupted during thread register load. \nWARNING:Thread registers and backtraces may not be accurate. for tid = %d" % tid
         regs.ResetRegisterValues()
         print "FATAL ERROR: Failed to get register state for thread id 0x%x " % tid

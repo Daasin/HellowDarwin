@@ -1563,7 +1563,7 @@ def SaveStackshotReport(j, outfile_name, incomplete):
     timestamp = ss.get('usecs_since_epoch')
     try:
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S +0000",time.gmtime(timestamp / 1000000 if timestamp else None))
-    except ValueError, e:
+    except ValueError as e:
         print("couldn't convert timestamp:", str(e))
         timestamp = None
 
@@ -1753,7 +1753,7 @@ def RunCommand(bash_cmd_string, get_stderr = True):
             output_str = subprocess.check_output(cmd_args, stderr=subprocess.STDOUT)
         else:
             output_str = subprocess.check_output(cmd_args, stderr=None)
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         exit_code = e.returncode
     finally:
         return (exit_code, output_str)

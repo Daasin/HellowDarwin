@@ -927,7 +927,7 @@ def ShowAllRights(cmd_args=None, cmd_options={}):
         try:
             print PrintIPCInformation.header
             PrintIPCInformation(t.itk_space, True, False, rights_type) + "\n\n"
-        except (KeyboardInterrupt, SystemExit):
+        except (KeyboardInterrupt as SystemExit):
             raise
         except:
             print "Failed to get IPC information. Do individual showtaskrights <task> to find the error. \n\n"
@@ -1263,7 +1263,7 @@ def IterateAllPorts(tasklist, func, ctx, include_psets, follow_busyports, should
             if unsigned(tport) > 0:
                 try:
                     func(t, space, ctx, registeredport_idx, 0, tport, 17)
-                except Exception, e:
+                except Exception as e:
                     print("\texception looking through registered port {:d}/{:d} in {:s}".format(tr_idx,tr_max,t))
                     pass
             tr_idx += 1
@@ -1276,7 +1276,7 @@ def IterateAllPorts(tasklist, func, ctx, include_psets, follow_busyports, should
             if unsigned(export) > 0:
                 try:
                     func(t, space, ctx, excports_idx, 0, export, 17)
-                except Exception, e:
+                except Exception as e:
                     print("\texception looking through exception port {:d}/{:d} in {:s}".format(exidx,exmax,t))
                     pass
             exidx += 1
@@ -1308,7 +1308,7 @@ def IterateAllPorts(tasklist, func, ctx, include_psets, follow_busyports, should
                     if unsigned(export) > 0:
                         try:
                             func(t, space, ctx, excports_idx, 0, export, 17)
-                        except Exception, e:
+                        except Exception as e:
                             print("\texception looking through exception port {:d}/{:d} in {:s}".format(exidx,exmax,t))
                             pass
                     exidx += 1

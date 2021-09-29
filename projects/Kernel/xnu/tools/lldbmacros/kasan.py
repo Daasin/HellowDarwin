@@ -31,7 +31,7 @@ def is_kasan_build():
     try:
         enable = kern.globals.kasan_enabled
         return True
-    except ValueError, e:
+    except ValueError as e:
         return False
 
 def shadow_for_address(addr, shift):

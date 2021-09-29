@@ -31,7 +31,7 @@ def RunCommand(cmd_string):
     exit_code = 0
     try:
         output_str = subprocess.check_output(cmd_string, shell=True)
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         exit_code = e.returncode
     finally:
         return (exit_code, output_str.strip())
