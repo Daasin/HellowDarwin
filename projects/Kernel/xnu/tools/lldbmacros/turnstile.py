@@ -72,7 +72,7 @@ def PrintTurnstile(turnstile):
     """
     print(GetTurnstileSummary(turnstile))
 
-    """ print(turnstile freelist if its not on a thread or freelist """)
+    """ print turnstile freelist if its not on a thread or freelist """
     if turnstile.ts_state & 0x3 == 0:
       needsHeader = True
       for free_turnstile in IterateListEntry(turnstile.ts_free_turnstiles, 'struct turnstile *', 'ts_free_elm', 's'):
