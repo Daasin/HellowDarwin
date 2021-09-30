@@ -21,4 +21,4 @@ def ShowSimpleCounter(cmd_args=None):
     if not cmd_args:
         raise ArgumentError("Please specify the address of the counter you want to read.")
         return
-    print GetSimpleCounter(kern.GetValueFromAddress(cmd_args[0], "scalable_counter_t"))
+    print(GetSimpleCounter(kern.GetValueFromAddress(cmd_args[0], "scalable_counter_t")))

@@ -21,7 +21,7 @@ def lldb_run_command(cmdstring):
     global lldb_run_command_state
     retval =""
     res = lldb.SBCommandReturnObject()
-    # set special attribute to notify xnu framework to not print on stdout
+    # set special attribute to notify xnu framework to not print(on stdout)
     lldb_run_command_state['active'] = True
     lldb.debugger.GetCommandInterpreter().HandleCommand(cmdstring, res)
     lldb_run_command_state['active'] = False
@@ -38,17 +38,17 @@ def EnableLLDBAPILogging():
     logfile_name = "/tmp/lldb.%d.log" % int(time.time())
     enable_log_base_cmd = "log enable --file %s " % logfile_name
     cmd_str = enable_log_base_cmd + ' lldb api'
-    print cmd_str
-    print lldb_run_command(cmd_str)
+    print(cmd_str)
+    print(lldb_run_command(cmd_str))
     cmd_str = enable_log_base_cmd + ' gdb-remote packets'
-    print cmd_str
-    print lldb_run_command(cmd_str)
+    print(cmd_str)
+    print(lldb_run_command(cmd_str))
     cmd_str = enable_log_base_cmd + ' kdp-remote packets'
-    print cmd_str
-    print lldb_run_command(cmd_str)
-    print lldb_run_command("version")
-    print "Please collect the logs from %s for filing a radar. If you had encountered an exception in a lldbmacro command please re-run it." % logfile_name
-    print "Please make sure to provide the output of 'version', 'image list' and output of command that failed."
+    print(cmd_str)
+    print(lldb_run_command(cmd_str))
+    print(lldb_run_command("version"))
+    print("Please collect the logs from %s for filing a radar. If you had encountered an exception in a lldbmacro command please re-run it." % logfile_name)
+    print("Please make sure to provide the output of 'version', 'image list' and output of command that failed.")
     return
 
 def GetConnectionProtocol():
@@ -104,7 +104,7 @@ def GetLongestMatchOption(searchstr, options=[], ignore_case=True):
                  empty array is returned if searchstr does not match any option.
         example:
             subcommand = LongestMatch('Rel', ['decode', 'enable', 'reload'], ignore_case=True)
-            print subcommand # prints ['reload']
+            print(subcommand # prints ['reload'])
     """
     if ignore_case:
         searchstr = searchstr.lower()
@@ -155,7 +155,7 @@ def loadLLDB():
     """
     try:
         import lldb
-        print 'Found LLDB on path'
+        print('Found LLDB on path')
     except:
         platdir = subprocess.check_output('xcodebuild -version -sdk iphoneos PlatformPath'.split())
         offset = platdir.find("Contents/Developer")
@@ -167,9 +167,9 @@ def loadLLDB():
             sys.path.append(lldb_py)
             global lldb
             lldb = __import__('lldb')
-            print 'Found LLDB in SDK'
+            print('Found LLDB in SDK')
         else:
-            print 'Failed to locate lldb.py from', lldb_py
+            print('Failed to locate lldb.py from', lldb_py)
             sys.exit(-1)
     return True
 
@@ -187,7 +187,7 @@ class Logger():
 
         self.log_file_handle.write(debug_line_str + "\n")
         if self.redirect_to_stdout :
-            print debug_line_str
+            print(debug_line_str)
 
     def write(self, line):
         self.log_debug(line)
@@ -345,7 +345,7 @@ def addDSYM(uuid, info):
     """
     global _dsymlist
     if "DBGSymbolRichExecutable" not in info:
-        print "Error: Unable to find syms for %s" % uuid
+        print("Error: Unable to find syms for %s" % uuid)
         return False
     if not uuid in _dsymlist:
         # add the dsym itself
@@ -427,7 +427,7 @@ def debuglog(s):
     """
     global config
     if config['debug']:
-      print "DEBUG:",s
+      print("DEBUG:",s)
     return None
 
 def IsAppleInternal():
@@ -443,14 +443,14 @@ def IsAppleInternal():
     return retval
 
 def print_hex_data(data, begin_offset=0, desc=""):
-    """ print on stdout "hexdump -C < data" like output
+    """ print(on stdout "hexdump -C < data" like output)
         params:
             data - bytearray or array of int where each int < 255
             begin_offset - int offset that should be printed in left column
-            desc - str optional description to print on the first line to describe data
+            desc - str optional description to print(on the first line to describe data)
     """
     if desc:
-        print "{}:".format(desc)
+        print("{}:".format(desc))
     index = 0
     total_len = len(data)
     hex_buf = ""
@@ -465,10 +465,10 @@ def print_hex_data(data, begin_offset=0, desc=""):
         if index and index < total_len and index % 8 == 0:
             hex_buf += " "
         if index > 1 and index < total_len and (index % 16) == 0:
-            print "{:08x} {: <50s} |{: <16s}|".format(begin_offset + index - 16, hex_buf, char_buf)
+            print("{:08x} {: <50s} |{: <16s}|".format(begin_offset + index - 16, hex_buf, char_buf))
             hex_buf = ""
             char_buf = ""
-    print "{:08x} {: <50s} |{: <16s}|".format(begin_offset + index - 16, hex_buf, char_buf)
+    print("{:08x} {: <50s} |{: <16s}|".format(begin_offset + index - 16, hex_buf, char_buf))
     return
 
 def Ones(x):

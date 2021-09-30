@@ -221,10 +221,10 @@ class VisualMachoMap(object):
                 (lc, segment, sections) = cmd
                 lc_cmd_str = get_load_command_human_name(lc.cmd)
                 lc_str_rep = "\n\t LC: {:s} size:{:d} nsects:{:d}".format(lc_cmd_str, lc.cmdsize, len(sections))
-                # print lc_str_rep
+                # print(lc_str_rep)
                 if isinstance(segment, SEGMENT_TYPES):
                     segname = segment.segname[:segment.segname.find('\x00')]
-                    # print "\tsegment: {:s} vmaddr: {:x} vmsize:{:d} fileoff: {:x} filesize: {:d}".format(
+                    # print("\tsegment: {:s} vmaddr: {:x} vmsize:{:d} fileoff: {:x} filesize: {:d}".format()
                     #             segname, segment.vmaddr, segment.vmsize, segment.fileoff, segment.filesize)
                     blocks.append(MapBlock(segname, segment.vmaddr, segment.vmsize, segment.fileoff, segment.filesize,
                                             ' LC:{} : {} init:{:#0X} max:{:#0X}'.format(lc_cmd_str, segname, segment.initprot, segment.maxprot),
@@ -233,7 +233,7 @@ class VisualMachoMap(object):
                         section_name = section.sectname[:section.sectname.find('\x00')]
                         blocks.append(MapBlock(section_name, section.addr, section.size, section.offset,
                                                 section.size, 'al:{} flags:{:#0X}'.format(section.align, section.flags), False))
-                        #print "\t\tsection:{:s} addr:{:x} off:{:x} size:{:d}".format(section_name, section.addr, section.offset, section.size)
+                        #print("\t\tsection:{:s} addr:{:x} off:{:x} size:{:d}".format(section_name, section.addr, section.offset, section.size))
                 elif isinstance(segment, macholib.mach_o.uuid_command):
                     other_cmds += "\n\t uuid: {:s}".format(GetUUIDSummary(segment.uuid))
                 elif isinstance(segment, macholib.mach_o.rpath_command):
@@ -278,16 +278,16 @@ class VisualMachoMap(object):
         if prev_block.vmsize > VisualMachoMap.KB_16:
             mstr.append(self.get_space_line())
         mstr.append(self.get_header_line())
-        print outstr
-        print "\n".join(mstr)
-        print "\n\n=============== Other Load Commands ==============="
-        print other_cmds
+        print(outstr)
+        print("\n".join(mstr))
+        print("\n\n=============== Other Load Commands ===============")
+        print(other_cmds)
 
 
 if __name__ == '__main__':
     import sys
     if len(sys.argv) < 2:
-        print "Usage: {} /path/to/macho_binary".format(sys.argv[0])
+        print("Usage: {} /path/to/macho_binary".format(sys.argv[0]))
         sys.exit(1)
     with open(sys.argv[-1], 'rb') as fp:
         data = fp.read()

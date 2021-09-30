@@ -5,7 +5,7 @@ import re
 
 class ArgumentError(Exception):
     """ Exception class for raising errors in command arguments. The lldb_command framework will catch this
-        class of exceptions and print suitable error message to user.
+        class of exceptions and print(suitable error message to user.)
     """
     def __init__(self, msg):
         self.error_message = msg
@@ -96,9 +96,9 @@ class NOVT(object):
 
 class CommandOutput(object):
     """
-    An output handler for all commands. Use Output.print to direct all output of macro via the handler.
+    An output handler for all commands. Use Output.print(to direct all output of macro via the handler.)
     These arguments are passed after a "--". eg
-    (lldb) zprint -- -o /tmp/zprint.out.txt
+    (lldb) zprint(-- -o /tmp/zprint.out.txt)
 
     Currently this provide capabilities
     -h show help
@@ -176,10 +176,10 @@ class CommandOutput(object):
         return s.format(*args, **kwargs)
 
     def error(self, s, *args, **kwargs):
-        print self.format("{cmd.cmd_name}: {VT.Red}"+s+"{VT.Default}", cmd=self, *args, **kwargs)
+        print(self.format("{cmd.cmd_name}: {VT.Red}"+s+"{VT.Default}", cmd=self, *args, **kwargs))
 
     def write(self, s):
-        """ Handler for all commands output. By default just print to stdout """
+        """ Handler for all commands output. By default just print(to stdout """)
 
         s = self._buffer + s
 
@@ -233,17 +233,17 @@ class CommandOutput(object):
             if o == "-o" and len(a) > 0:
                 self.fname=os.path.normpath(os.path.expanduser(a.strip()))
                 self.fhandle=open(self.fname,"w")
-                print "saving results in file ",str(a)
+                print("saving results in file ",str(a))
                 self.fhandle.write("(lldb)%s %s \n" % (self.cmd_name, " ".join(cmdargs)))
                 self.isatty = os.isatty(self.fhandle.fileno())
             elif o == "-s" and len(a) > 0:
                 self.reg = re.compile(a.strip(),re.MULTILINE|re.DOTALL)
                 self.FILTER=True
-                print "showing results for regex:",a.strip()
+                print("showing results for regex:",a.strip())
             elif o == "-p" and len(a) > 0:
                 self.pluginRequired = True
                 self.pluginName = a.strip()
-                #print "passing output to " + a.strip()
+                #print("passing output to " + a.strip())
             elif o == "-v":
                 self.verbose_level += 1
             elif o == "-c":

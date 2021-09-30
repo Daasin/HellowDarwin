@@ -1,4 +1,4 @@
-# A basic Plugin that creates performance reports from zprint output
+# A basic Plugin that creates performance reports from zprint(output)
 kern_version = None
 
 def plugin_init(kernel_target, config, lldb_obj, isConnected):

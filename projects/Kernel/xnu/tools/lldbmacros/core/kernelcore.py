@@ -21,7 +21,7 @@ def IterateTAILQ_HEAD(headval, element_name):
         example usage:
           list_head = kern.GetGlobalVariable('mountlist')
           for entryobj in IterateTAILQ_HEAD(list_head, 'mnt_list'):
-            print GetEntrySummary(entryobj)
+            print(GetEntrySummary(entryobj))
     """
     iter_val = headval.tqh_first
     while unsigned(iter_val) != 0 :
@@ -39,7 +39,7 @@ def IterateLinkedList(element, field_name):
         example usage:
             first_zone = kern.GetGlobalVariable('first_zone')
             for zone in IterateLinkedList(first_zone, 'next_zone'):
-                print GetZoneSummary(zone)
+                print(GetZoneSummary(zone))
     """
     elt = element
     while unsigned(elt) != 0:
@@ -60,7 +60,7 @@ def IterateListEntry(element, element_type, field_name, list_prefix=''):
         example usage:
             headp = kern.globals.initproc.p_children
             for pp in IterateListEntry(headp, 'struct proc *', 'p_sibling'):
-                print GetProcInfo(pp)
+                print(GetProcInfo(pp))
     """
     elt = element.__getattr__(list_prefix + 'lh_first')
     if type(element_type) == str:
@@ -86,7 +86,7 @@ def IterateLinkageChain(queue_head, element_type, field_name, field_ofst=0):
         example usage:
             coalq = kern.GetGlobalVariable('coalitions_q')
             for coal in IterateLinkageChain(coalq, 'struct coalition *', 'coalitions'):
-                print GetCoalitionInfo(coal)
+                print(GetCoalitionInfo(coal))
     """
     global kern
     if type(element_type) == str:
@@ -149,7 +149,7 @@ def IterateQueue(queue_head, element_ptr_type, element_field_name, backwards=Fal
             value  : an object thats of type (element_type) queue_head->next. Always a pointer object
         example usage:
             for page_meta in IterateQueue(kern.globals.first_zone.pages.all_free, 'struct zone_page_metadata *', 'pages'):
-                print page_meta
+                print(page_meta)
     """
     if type(element_ptr_type) == str :
         element_ptr_type = gettype(element_ptr_type)
@@ -369,9 +369,9 @@ class KernelTarget(object):
                 syms = kern.Symbolicate(0xffffff80002c0df0)
                 for s in syms:
                   if s.GetType() == lldb.eSymbolTypeCode:
-                    print "Function", s.GetName()
+                    print("Function", s.GetName())
                   if s.GetType() == lldb.eSymbolTypeData:
-                    print "Variable", s.GetName()
+                    print("Variable", s.GetName())
         """
         if type(int(1)) != type(addr):
             if str(addr).strip().find("0x") == 0 :

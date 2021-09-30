@@ -21,13 +21,13 @@ class value(object):
     of this class with it:
 
     pt = lldb.value(lldb.frame.FindVariable("pt"))
-    print pt
-    print pt.x
-    print pt.y
+    print(pt)
+    print(pt.x)
+    print(pt.y)
 
     pt = lldb.value(lldb.frame.FindVariable("rectangle_array"))
-    print rectangle_array[12]
-    print rectangle_array[5].origin.x'''
+    print(rectangle_array[12])
+    print(rectangle_array[5].origin.x''')
     def __init__(self, sbvalue):
         #_sbval19k84obscure747 is specifically chosen to be obscure.
         #This avoids conflicts when attributes could mean any field value in code
@@ -293,7 +293,7 @@ class value(object):
 
     def _GetValueAsSigned(self):
         if self._sbval19k84obscure747_is_ptr:
-            print "ERROR: You cannot get 'int' from pointer type %s, please use unsigned(obj) for such purposes." % str(self._sbval19k84obscure747_type)
+            print("ERROR: You cannot get 'int' from pointer type %s, please use unsigned(obj) for such purposes." % str(self._sbval19k84obscure747_type))
             raise ValueError("Cannot get signed int for pointer data.")
         serr = lldb.SBError()
         retval = self._sbval19k84obscure747.GetValueAsSigned(serr)
@@ -424,7 +424,7 @@ def cast(obj, target_type):
     if type(obj) is value:
         return obj._GetValueAsCast(dest_type)
     elif type(obj) is int:
-        print "ERROR: You cannot cast an 'int' to %s, please use kern.GetValueFromAddress() for such purposes." % str(target_type)
+        print("ERROR: You cannot cast an 'int' to %s, please use kern.GetValueFromAddress() for such purposes." % str(target_type))
     raise TypeError("object of type %s cannot be casted to %s" % (str(type(obj)), str(target_type)))
 
 def containerof(obj, target_type, field_name):
