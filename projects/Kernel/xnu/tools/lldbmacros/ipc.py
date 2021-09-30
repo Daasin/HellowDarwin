@@ -1,5 +1,5 @@
 """ Please make sure you read the README file COMPLETELY BEFORE reading anything below.
-    It is very critical that you read coding guidelines in Section E in README file. 
+    It is very critical that you read coding guidelines in Section E in README file.
 """
 from xnu import *
 import sys, shlex
@@ -12,7 +12,7 @@ import xnudefines
 
 @header("{0: <20s} {1: <6s} {2: <6s} {3: <10s} {4: <32s}".format("task", "pid", '#acts', "tablesize", "command"))
 def GetTaskIPCSummary(task, show_busy = False):
-    """ Display a task's ipc summary. 
+    """ Display a task's ipc summary.
         params:
             task : core.value represeting a Task in kernel
         returns
@@ -116,7 +116,7 @@ def GetPortDestProc(portp):
             else:
                 out_str = "unknown"
             break
-    
+
     return out_str
 
 
@@ -186,7 +186,7 @@ def GetKMsgSummary(kmsgp, prefix_str=""):
     prefix_str = "{0: <20s} ".format(' ') + prefix_str
     disposition = ""
     bits = kmsgh.msgh_bits & 0xff
-    
+
     # remote port
     if bits == 17:
         disposition = "rS"
@@ -194,13 +194,13 @@ def GetKMsgSummary(kmsgp, prefix_str=""):
         disposition = "rO"
     else :
         disposition = "rX" # invalid
-    
+
     out_string += "{0: <2s}".format(disposition)
-    
+
     # local port
     disposition = ""
     bits = (kmsgh.msgh_bits & 0xff00) >> 8
-    
+
     if bits == 17:
         disposition = "lS"
     elif bits == 18:
@@ -209,13 +209,13 @@ def GetKMsgSummary(kmsgp, prefix_str=""):
         disposition = "l-"
     else:
         disposition = "lX"  # invalid
-        
+
     out_string += "{0: <2s}".format(disposition)
-    
+
     # voucher
     disposition = ""
     bits = (kmsgh.msgh_bits & 0xff0000) >> 16
-    
+
     if bits == 17:
         disposition = "vS"
     elif bits == 0:
@@ -223,20 +223,20 @@ def GetKMsgSummary(kmsgp, prefix_str=""):
     else:
         disposition = "vX"
 
-    out_string += "{0: <2s}".format(disposition) 
-        
+    out_string += "{0: <2s}".format(disposition)
+
     # complex message
     if kmsgh.msgh_bits & 0x80000000:
         out_string += "{0: <1s}".format("c")
     else:
         out_string += "{0: <1s}".format("s")
-    
+
     # importance boost
     if kmsgh.msgh_bits & 0x20000000:
         out_string += "{0: <1s}".format("I")
     else:
         out_string += "{0: <1s}".format("-")
-    
+
     dest_proc_name = ""
     if kmsgp.ikm_header.msgh_remote_port:
         dest_proc_name = GetDestinationProcessFromPort(kmsgp.ikm_header.msgh_remote_port)
@@ -244,11 +244,11 @@ def GetKMsgSummary(kmsgp, prefix_str=""):
     out_string += "{0: ^6d}   {1: <#019x} {2: <26s} {3: <26s}\n".format(
                     unsigned(kmsgh.msgh_size), unsigned(kmsgh.msgh_local_port),
                     GetKMsgSrc(kmsgp), dest_proc_name)
-    
+
     if kmsgh.msgh_bits & 0x80000000:
         out_string += prefix_str + "\t" + GetKMsgComplexBodyDesc.header + "\n"
         out_string += prefix_str + "\t" + GetKMsgComplexBodyDesc(kmsgp, prefix_str + "\t") + "\n"
-    
+
     return out_string
 
 @header("{: <20s} {: <20s} {: <10s}".format("descriptor", "address", "size"))
@@ -309,7 +309,7 @@ def GetKMsgComplexBodyDesc(kmsgp, prefix_str=""):
                 out_string += " " + GetMachMsgOOLDescriptorSummary(addressof(ool))
         except:
             out_string += "\n" + prefix_str + "Invalid Descriptor: {}".format(dsc)
-    return out_string 
+    return out_string
 
 def GetKMsgSrc(kmsgp):
     """ Routine that prints a kmsg's source process and pid details
@@ -320,7 +320,7 @@ def GetKMsgSrc(kmsgp):
     """
     kmsgsrchp = Cast(kmsgp, 'ipc_kmsg_t').ikm_header
     kmsgpid = int(Cast(kern.GetValueFromAddress(unsigned(kmsgsrchp) + kmsgsrchp.msgh_size, 'uint *')[10], 'pid_t'))
-    
+
     return "{0:s} ({1:d})".format(GetProcNameForPid(kmsgpid), kmsgpid)
 
 
@@ -419,9 +419,9 @@ def PrintPortSetSummary(pset, space = 0):
 
 # Macro: showipc
 
-@lldb_command('showipc') 
+@lldb_command('showipc')
 def ShowIPC(cmd_args=None):
-    """  Routine to print data for the given IPC space 
+    """  Routine to print data for the given IPC space
          Usage: showipc <address of ipc space>
     """
     if not cmd_args:
@@ -439,7 +439,7 @@ def ShowIPC(cmd_args=None):
 
 # Macro: showtaskipc
 
-@lldb_command('showtaskipc') 
+@lldb_command('showtaskipc')
 def ShowTaskIPC(cmd_args=None):
     """  Routine to print IPC summary of given task
          Usage: showtaskipc <address of task>
@@ -463,7 +463,7 @@ def ShowTaskIPC(cmd_args=None):
 
 # Macro: showallipc
 
-@lldb_command('showallipc') 
+@lldb_command('showallipc')
 def ShowAllIPC(cmd_args=None):
     """  Routine to print IPC summary of all tasks
          Usage: showallipc
@@ -479,7 +479,7 @@ def ShowAllIPC(cmd_args=None):
 
 @lldb_command('showipcsummary', fancy=True)
 def ShowIPCSummary(cmd_args=None, cmd_options={}, O=None):
-    """ Summarizes the IPC state of all tasks. 
+    """ Summarizes the IPC state of all tasks.
         This is a convenient way to dump some basic clues about IPC messaging. You can use the output to determine
         tasks that are candidates for further investigation.
     """
@@ -543,7 +543,7 @@ def GetDestinationProcessFromPort(port):
 
 @header("{0: <20s} {1: <20s}".format("destname", "destination") )
 def GetPortDestinationSummary(port):
-    """ Get destination information for a port. 
+    """ Get destination information for a port.
         params: port - core.value representation of 'ipc_port *' object
         returns: str - string of info about ports destination
     """
@@ -564,14 +564,14 @@ def GetPortDestinationSummary(port):
 
     out_str += format_string.format(destname_str, destination_str)
     return out_str
-    
+
 @lldb_type_summary(['ipc_entry_t'])
 @header("{: <20s} {: <12s} {: <8s} {: <8s} {: <8s} {: <8s} {: <20s} {: <20s}".format("object", "name", "rite", "urefs", "nsets", "nmsgs", "destname", "destination"))
 def GetIPCEntrySummary(entry, ipc_name='', rights_filter=0):
     """ Get summary of a ipc entry.
         params:
             entry - core.value representing ipc_entry_t in the kernel
-            ipc_name - str of format '0x0123' for display in summary.  
+            ipc_name - str of format '0x0123' for display in summary.
         returns:
             str - string of ipc entry related information
 
@@ -677,7 +677,7 @@ def GetIPCEntrySummary(entry, ipc_name='', rights_filter=0):
 
 @header("{0: >20s}".format("user bt") )
 def GetPortUserStack(port, task):
-    """ Get UserStack information for the given port & task. 
+    """ Get UserStack information for the given port & task.
         params: port - core.value representation of 'ipc_port *' object
                 task - value representing 'task *' object
         returns: str - string information on port's userstack
@@ -685,7 +685,7 @@ def GetPortUserStack(port, task):
     out_str = ''
     ie_port_callstack = port.ip_callstack
     ie_port_spares = port.ip_spares[0]
-    proc_val = Cast(task.bsd_info, 'proc *')  
+    proc_val = Cast(task.bsd_info, 'proc *')
     if ie_port_callstack[0]:
         out_str += "{: <10x}".format(ie_port_callstack[0])
         count = 1
@@ -712,7 +712,7 @@ def PrintIPCInformation(space, show_entries=False, show_userstack=False, rights_
     else: flags += ' '
     if (is_bits & 0x20000000) != 0: flags +='G'
     print format_string.format(space, space.is_task, space.is_table, flags, space.is_table_size, space.is_table_next, space.is_low_mod, space.is_high_mod)
-    
+
     #should show the each individual entries if asked.
     if show_entries == True:
         print "\t" + GetIPCEntrySummary.header
@@ -742,7 +742,7 @@ def PrintIPCInformation(space, show_entries=False, show_userstack=False, rights_
 
 @lldb_command('showrights', 'R:')
 def ShowRights(cmd_args=None, cmd_options={}):
-    """  Routine to print rights information for the given IPC space 
+    """  Routine to print rights information for the given IPC space
          Usage: showrights [-R rights_type] <address of ipc space>
                 -R rights_type  : only display rights matching the string 'rights_type'
 
@@ -1153,7 +1153,7 @@ thports_idx = -3000
 
 def IterateAllPorts(tasklist, func, ctx, include_psets, follow_busyports, should_log):
     """ Iterate over all ports in the system, calling 'func'
-        for each entry in 
+        for each entry in
     """
     global port_iteration_do_print_taskname
     global intransit_idx, taskports_idx, thports_idx, registeredport_idx, excports_idx
@@ -1548,7 +1548,7 @@ def ShowBusyPortSummary(cmd_args=None):
 # Macro: showport:
 @lldb_command('showport','K')
 def ShowPort(cmd_args=None, cmd_options={}):
-    """ Routine that lists details about a given IPC port 
+    """ Routine that lists details about a given IPC port
         Syntax: (lldb) showport 0xaddr
     """
     show_kmsgs = True
@@ -1630,11 +1630,11 @@ def ShowPSet(cmd_args=None, cmd_options={}):
 def ShowAllIITs(cmd_args=[], cmd_options={}):
     """ Development only macro. Show list of all iits allocated in the system. """
     try:
-        iit_queue = kern.globals.global_iit_alloc_queue 
+        iit_queue = kern.globals.global_iit_alloc_queue
     except ValueError:
         print "This debug macro is only available in development or debug kernels"
         return
-    
+
     print GetIPCImportantTaskSummary.header
     for iit in IterateQueue(iit_queue, 'struct ipc_importance_task *', 'iit_allocation'):
         print GetIPCImportantTaskSummary(iit)
@@ -1681,9 +1681,9 @@ def GetIPCImportanceElemSummary(iie):
     out_str += fmt.format(iie, type_str, refs, made_refs, kmsg_count, inherit_count)
     if config['verbosity'] > vHUMAN:
         if kmsg_count > 0:
-            out_str += "\n\t"+ GetKMsgSummary.header 
+            out_str += "\n\t"+ GetKMsgSummary.header
             for k in IterateQueue(iie.iie_kmsgs, 'struct ipc_kmsg *',  'ikm_inheritance'):
-                out_str += "\t" + "{: <#018x}".format(k.ikm_header.msgh_remote_port) + '   ' + GetKMsgSummary(k, "\t").lstrip() 
+                out_str += "\t" + "{: <#018x}".format(k.ikm_header.msgh_remote_port) + '   ' + GetKMsgSummary(k, "\t").lstrip()
             out_str += "\n"
         if inherit_count > 0:
             out_str += "\n\t" + GetIPCImportanceInheritSummary.header + "\n"
@@ -1711,9 +1711,9 @@ def GetIPCImportantTaskSummary(iit):
 
 @lldb_command('showallimportancetasks')
 def ShowIPCImportanceTasks(cmd_args=[], cmd_options={}):
-    """ display a list of all tasks with ipc importance information. 
+    """ display a list of all tasks with ipc importance information.
         Usage: (lldb) showallimportancetasks
-        Tip: add "-v" to see detailed information on each kmsg or inherit elems 
+        Tip: add "-v" to see detailed information on each kmsg or inherit elems
     """
     print ' ' + GetIPCImportantTaskSummary.header + ' ' + GetIPCImportanceElemSummary.header
     for t in kern.tasks:
@@ -1742,7 +1742,7 @@ def GetIPCVoucherAttrControlSummary(ivac):
     out_str = ""
     fmt = "{c: <#018x} {c.ivac_refs: <10d} {c.ivac_port: <#018x} {c.ivac_table: <#018x} {c.ivac_table_size: <8d} {c.ivac_key_index: <5d} {growing: <5s} {c.ivac_freelist: <5d}"
     growing_str = ""
-    
+
     if unsigned(ivac) == 0:
         return "{: <#018x}".format(ivac)
 
@@ -1769,7 +1769,7 @@ def ShowIPCVoucherAttributeControl(cmd_args=[], cmd_options={}):
             print "{: <5d} ".format(cur_entry_index) + GetIPCVoucherAttributeEntrySummary(addressof(ivac.ivac_table[cur_entry_index]))
             cur_entry_index += 1
 
-    
+
 
 
 @header("{: <18s} {: <30s} {: <30s} {: <30s} {: <30s} {: <30s}".format("ivam", "get_value_fn", "extract_fn", "release_value_fn", "command_fn", "release_fn"))
@@ -1778,7 +1778,7 @@ def GetIPCVoucherAttrManagerSummary(ivam):
     """ describes a voucher attribute manager settings """
     out_str = ""
     fmt = "{: <#018x} {: <30s} {: <30s} {: <30s} {: <30s} {: <30s}"
-    
+
     if unsigned(ivam) == 0 :
         return "{: <#018x}".format(ivam)
 
@@ -1875,7 +1875,7 @@ def GetBagofBitsHandleSummary(handle_ptr):
 
 @static_var('attr_managers',{1: GetATMHandleSummary, 2: GetIPCHandleSummary, 3: GetBankHandleSummary, 7: GetBagofBitsHandleSummary})
 def GetHandleSummaryForKey(handle_ptr, key_num):
-    """ Get a summary of handle pointer from the voucher attribute manager. 
+    """ Get a summary of handle pointer from the voucher attribute manager.
         For example key 2 -> ipc and it puts either ipc_importance_inherit_t or ipc_important_task_t.
                     key 3 -> Bank and it puts either bank_task_t or bank_account_t.
                     key 7 -> Bag of Bits and it puts user_data_element_t in handle. So summary of it would be Bag of Bits content and refs etc.
@@ -1957,7 +1957,7 @@ def GetIPCVoucherSummary(voucher, show_entries=False):
                 if entries_header_str :
                     entries_str = entries_header_str
                     entries_header_str = ''
-                entries_str += "\n\t" + s 
+                entries_str += "\n\t" + s
         if not entries_header_str:
             entries_str += "\n\t"
     out_str += entries_str
@@ -1971,7 +1971,7 @@ def GetVoucherManagerKeyForIndex(idx):
 def GetVoucherAttributeManagerForKey(k):
     """ Walks through the iv_global_table and finds the attribute manager name
         params: k - int key number of the manager
-        return: cvalue - the attribute manager object. 
+        return: cvalue - the attribute manager object.
                 None - if not found
     """
     retval = None
@@ -1987,7 +1987,7 @@ def GetVoucherAttributeManagerForKey(k):
 def GetVoucherAttributeControllerForKey(k):
     """ Walks through the iv_global_table and finds the attribute controller
         params: k - int key number of the manager
-        return: cvalue - the attribute controller object. 
+        return: cvalue - the attribute controller object.
                 None - if not found
     """
     retval = None
@@ -2009,7 +2009,7 @@ def GetVoucherAttributeManagerName(ivam):
     return kern.Symbolicate(unsigned(ivam))
 
 def GetVoucherAttributeManagerNameForIndex(idx):
-    """ get voucher attribute manager name for index 
+    """ get voucher attribute manager name for index
         return: str - name of the attribute manager object
     """
     return GetVoucherAttributeManagerName(GetVoucherAttributeManagerForKey(GetVoucherManagerKeyForIndex(idx)))
@@ -2046,7 +2046,7 @@ def GetVoucherValueHandleFromVoucherForIndex(voucher, idx):
 @lldb_command('showallvouchers')
 def ShowAllVouchers(cmd_args=[], cmd_options={}):
     """ Display a list of all vouchers in the global voucher hash table
-        Usage: (lldb) showallvouchers 
+        Usage: (lldb) showallvouchers
     """
     iv_hash_table = kern.globals.ivht_bucket
     num_buckets =  sizeof(kern.globals.ivht_bucket) / sizeof(kern.globals.ivht_bucket[0])

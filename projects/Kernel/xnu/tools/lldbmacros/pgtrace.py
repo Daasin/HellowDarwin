@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-                                                                                                                                                                                        
+# -*- coding: utf-8 -*-
 
 from xnu import *
 
@@ -13,7 +13,7 @@ def ShowPgtrace(cmd_args=None, cmd_options={}):
     max_entry = kern.globals.pgtrace.size
     rd_idx = kern.globals.pgtrace.rdidx
     wr_idx = kern.globals.pgtrace.wridx
-    
+
     print "-"*80
     print "rd_idx=%d wr_idx=%d num_entries=%d max_entry=%d" % (rd_idx, wr_idx, wr_idx-rd_idx, max_entry)
     print "-"*80
@@ -33,6 +33,6 @@ def ShowPgtrace(cmd_args=None, cmd_options={}):
             entry_str += "%x=%x " % (entry.res.rr_addrdata[i].ad_addr, entry.res.rr_addrdata[i].ad_data)
 
         print entry_str
-        
+
         rd_idx += 1
 # EndMacro

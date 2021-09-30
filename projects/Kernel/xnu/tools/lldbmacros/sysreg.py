@@ -3,12 +3,12 @@
 """
 
 """ Note for adding new register support:
-    
+
     1. Add target register to "supported registers" in the docstring of DecodeSysreg
     2. Populate _SYSREG_TO_DECODE_FUNC_MAP with your implementation, optionally using
        _SYSREG_TO_DOCNAME_MAP
     3. Populate _SUPPORTED_SYSREGS list with target register
-    
+
 """
 
 from xnu import *
@@ -98,7 +98,7 @@ def PrintEsrEl1Explanation(regval):
 
     iss_fields_xpath = './registers/register/reg_fieldsets/fields/field[@id="ISS_24_0"]/partial_fieldset/fields[fields_instance="{}"]//field'.format(iss_condition_str)
     iss_fields = root.findall(iss_fields_xpath)
-    
+
     for field in iss_fields:
         _PrintEsrIssField(field, regval)
 
@@ -147,7 +147,7 @@ def _PrintEsrIssField(elem, regval):
         print '\r\n'
         print '\r\n'
     else:
-        print _Colorify(VT.Red, _GetIndentedString(2, '(No matching value, dumping out full description)')) 
+        print _Colorify(VT.Red, _GetIndentedString(2, '(No matching value, dumping out full description)'))
         for para in fd_before_paras:
             sys.stdout.write(_GetIndentedString(2, ''))
             sys.stdout.write(para.text)

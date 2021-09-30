@@ -144,7 +144,7 @@ def KDPWritePhysMEM(address, intval, bits):
     if "kdp" != GetConnectionProtocol():
         print "Target is not connected over kdp. Nothing to do here."
         return False
-    
+
     if "hwprobe" == KDPMode():
         # Send the proper KDP command and payload to the bare metal debug tool via a KDP server
         addr_for_kdp = struct.unpack("<Q", struct.pack(">Q", address))[0]
@@ -633,7 +633,7 @@ def PmapDecodeTTEARM(tte, level, verbose_level):
                     out_string += " not-global"
                 else:
                     out_string += " global"
-    
+
     print out_string
 
 
@@ -978,7 +978,7 @@ PVH_HIGH_FLAGS_ARM32 = (1 << 31)
 
 def PVWalkARM(pa):
     """ Walk a physical-to-virtual reverse mapping list maintained by the arm pmap
-        pa: physical address (NOT page number).  Does not need to be page-aligned 
+        pa: physical address (NOT page number).  Does not need to be page-aligned
     """
     vm_first_phys = unsigned(kern.globals.vm_first_phys)
     vm_last_phys = unsigned(kern.globals.vm_last_phys)
@@ -995,7 +995,7 @@ def PVWalkARM(pa):
         pvh = pvh | PVH_HIGH_FLAGS_ARM64
     else:
         iommu_flag = 0
-        iommu_table_flag = 0 
+        iommu_table_flag = 0
         pvh = pvh | PVH_HIGH_FLAGS_ARM32
     if pvh_type == 0:
         print "PVH type: NULL"
@@ -1178,7 +1178,7 @@ def FindMappingAtLevelARM(pmap, tt, nttes, level, va, action):
                 granule = 1 << 16
                 paddr = tte & 0xFFFF0000
             elif (tte & 0x3) != 0:
-                type = 'entry' 
+                type = 'entry'
                 granule = 1 << 12
                 paddr = tte & 0xFFFFF000
             else:
@@ -1233,7 +1233,7 @@ def FindMappingAtLevelARM64(pmap, tt, nttes, level, va, action):
                     FindMappingAtLevelARM64(pmap, tt_next, granule / ARM64_TTE_SIZE, level + 1, mapped_va, action)
 
         except Exception as exc:
-            print "Unable to access tte {:#x}".format(unsigned(addressof(tt[i]))) 
+            print "Unable to access tte {:#x}".format(unsigned(addressof(tt[i])))
 
 def ScanPageTables(action, targetPmap=None):
     """ Perform the specified action for all valid mappings in all page tables,
@@ -1262,7 +1262,7 @@ def ScanPageTables(action, targetPmap=None):
         ScanPmap(kern.GetValueFromAddress(targetPmap, 'pmap_t'), action)
     else:
         for pmap in IterateQueue(kern.globals.map_pmap_list, 'pmap_t', 'pmaps'):
-            ScanPmap(pmap, action)        
+            ScanPmap(pmap, action)
 
 @lldb_command('showallmappings')
 def ShowAllMappings(cmd_args=None):
@@ -1362,7 +1362,7 @@ def checkPVList(pmap, level, type, tte, paddr, va, granule):
     if tte is not None:
         tte_str = "pte {:#x} ({:#x}): ".format(unsigned(tte), paddr)
     else:
-        tte_str = "paddr {:#x}: ".format(paddr) 
+        tte_str = "paddr {:#x}: ".format(paddr)
     if pvh_type == 0 or pvh_type == 3:
         print "{:s}{:s}unexpected PVH type {:d}".format(pmap_str, tte_str, pvh_type)
     elif pvh_type == 2:
@@ -1370,7 +1370,7 @@ def checkPVList(pmap, level, type, tte, paddr, va, granule):
         if tte is not None and ptep != unsigned(tte):
             print "{:s}{:s}PVH mismatch ({:#x})".format(pmap_str, tte_str, ptep)
         try:
-            pte = long(unsigned(dereference(kern.GetValueFromAddress(ptep, 'pt_entry_t *')))) & page_base_mask 
+            pte = long(unsigned(dereference(kern.GetValueFromAddress(ptep, 'pt_entry_t *')))) & page_base_mask
             if (pte != paddr):
                 print "{:s}{:s}PVH {:#x} maps wrong page ({:#x}) ".format(pmap_str, tte_str, ptep, pte)
         except Exception as exc:
@@ -1385,7 +1385,7 @@ def checkPVList(pmap, level, type, tte, paddr, va, granule):
             if tte is not None and ptep == unsigned(tte):
                 tte_match = True
             try:
-                pte = long(unsigned(dereference(kern.GetValueFromAddress(ptep, 'pt_entry_t *')))) & page_base_mask 
+                pte = long(unsigned(dereference(kern.GetValueFromAddress(ptep, 'pt_entry_t *')))) & page_base_mask
                 if (pte != paddr):
                     print "{:s}{:s}PVE {:#x} maps wrong page ({:#x}) ".format(pmap_str, tte_str, ptep, pte)
             except Exception as exc:

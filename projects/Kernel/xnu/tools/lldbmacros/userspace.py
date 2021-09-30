@@ -160,7 +160,7 @@ def PrintUserspaceData(cmd_args=None, cmd_options={}):
                                  See: https://docs.python.org/2/library/struct.html#format-characters
         options:
             -X : print all values in hex.
-            -O <file path>: Save data to file 
+            -O <file path>: Save data to file
     """
 
     if not cmd_args or len(cmd_args) < 3:
@@ -235,7 +235,7 @@ def ShowTaskUserArgs(cmd_args=None, cmd_options={}):
             pos -= ptrsize
 
             user_data_string = GetUserDataAsString(task, pos, ptrsize)
-            ptr = struct.unpack(format_string, user_data_string)[0]          
+            ptr = struct.unpack(format_string, user_data_string)[0]
 
             if ptr == 0:
                 break
@@ -596,7 +596,7 @@ def ShowTaskUserLibraries(cmd_args=None):
     if dyld_all_image_infos_address == 0:
         print "No dyld shared library information available for task"
         return False
-    
+
     debuglog("Extracting version information.")
     vers_info_data = GetUserDataAsString(task, dyld_all_image_infos_address, 112)
     version = _ExtractDataFromString(vers_info_data, cur_data_offset, "uint32_t")
@@ -747,19 +747,19 @@ def ShowTaskUserDyldInfo(cmd_args=None):
     out_str += "infoArrayCount \t\t\t\t: {:d}\n".format(dyld_all_image_infos_infoArrayCount)
     out_str += "infoArray \t\t\t\t: {:#x}\n".format(dyld_all_image_infos_infoArray)
     out_str += "notification \t\t\t\t: {:#x}\n".format(dyld_all_image_infos_notification)
-    
+
     out_str += "processDetachedFromSharedRegion \t: "
     if dyld_all_image_infos_processDetachedFromSharedRegion != "":
         out_str += "TRUE\n".format(dyld_all_image_infos_processDetachedFromSharedRegion)
     else:
         out_str += "FALSE\n"
-    
+
     out_str += "libSystemInitialized \t\t\t: "
     if dyld_all_image_infos_libSystemInitialized != "":
         out_str += "TRUE\n".format(dyld_all_image_infos_libSystemInitialized)
     else:
         out_str += "FALSE\n"
-        
+
     out_str += "dyldImageLoadAddress \t\t\t: {:#x}\n".format(dyld_all_image_infos_dyldImageLoadAddress)
     out_str += "jitInfo \t\t\t\t: {:#x}\n".format(dyld_all_image_infos_jitInfo)
     out_str += "\ndyldVersion \t\t\t\t: {:#x}".format(dyld_all_image_infos_dyldVersion)

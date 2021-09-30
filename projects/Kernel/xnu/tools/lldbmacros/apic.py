@@ -14,12 +14,12 @@ ioapic_data_off = 0x10
 # LAPIC Helper functions
 ######################################
 def IsArchX86_64():
-    """ Determines if target machine is x86_64  
+    """ Determines if target machine is x86_64
         Returns:
             True if running on x86_64, False otherwise
     """
     return kern.arch == "x86_64"
-        
+
 
 @static_var('x2apic_enabled', -1)
 def IsX2ApicEnabled():
@@ -33,7 +33,7 @@ def IsX2ApicEnabled():
     apic_cfg_msr = 0x1b
     apic_cfg_msr_x2en_mask = 0xc00
     if IsX2ApicEnabled.x2apic_enabled < 0:
-        if (int(DoReadMsr64(apic_cfg_msr, xnudefines.lcpu_self)) & apic_cfg_msr_x2en_mask == 
+        if (int(DoReadMsr64(apic_cfg_msr, xnudefines.lcpu_self)) & apic_cfg_msr_x2en_mask ==
             apic_cfg_msr_x2en_mask):
             IsX2ApicEnabled.x2apic_enabled = 1
         else:
@@ -72,34 +72,34 @@ def DoLapicWrite32(offset, val, cpu):
 ######################################
 def GetLapicVersionFields(reg_val):
     """ Helper function for DoLapicDump that prints the fields of the
-        version register. 
+        version register.
         Params:
             reg_val: int - the value of the version register to print
-        Returns:   
+        Returns:
             string showing the fields
     """
     lvt_num = (reg_val >> 16) + 1
     version = reg_val & 0xff
     return "[VERSION={:d} MaxLVT={:d}]".format(lvt_num, version)
-    
+
 def GetLapicSpuriousVectorFields(reg_val):
     """ Helper function for DoLapicDump that prints the fields of the
         spurious vector register.
         Params:
             reg_val: int - the value of the spurious vector registre to print
-        Returns:   
+        Returns:
             string showing the fields
     """
     vector = reg_val & 0xff
     enabled = (reg_val & 0x100) >> 8
     return "[VEC={:3d} ENABLED={:d}]".format(vector, enabled)
-  
+
 def GetLapicIcrHiFields(reg_val):
-    """ Helper function for DoLapicDump that prints the fields of the 
+    """ Helper function for DoLapicDump that prints the fields of the
         upper 32-bits of the Interrupt Control Register (ICR).
         Params:
             reg_val: int - the value of the ICR to show
-        Returns:   
+        Returns:
             string showing the fields
     """
     dest = reg_val >> 24
@@ -110,7 +110,7 @@ def GetLapicTimerDivideFields(reg_val):
         timer divide register.
         Params:
             reg_val: int - the value of the timer divide register
-        Returns:   
+        Returns:
             string showing the fields
     """
     divide_val = ((reg_val & 0x8) >> 1) | (reg_val & 0x3)
@@ -125,7 +125,7 @@ def GetApicFields(reg_val):
         fields of the APIC register.
         Params:
             reg_val: int - the value of the APIC register to print
-        Returns:   
+        Returns:
             string showing the fields
     """
     vector = reg_val & 0xff
@@ -136,7 +136,7 @@ def GetApicFields(reg_val):
     polarity = reg_val & 0x2000
     pending = reg_val & 0x1000
 
-    ret_str = "[VEC={:3d} MASK={:3s} TRIG={:5s} POL={:4s} PEND={:3s}".format( 
+    ret_str = "[VEC={:3d} MASK={:3s} TRIG={:5s} POL={:4s} PEND={:3s}".format(
         vector,
         "no" if masked == 0 else "yes",
         "edge" if trigger == 0 else "level",
@@ -250,7 +250,7 @@ def DoIoApicDump():
         redir_val_hi = DoIoApicRead(0x10 + (redir * 2) + 1)
         print "IOAPIC[{:#04x}] IOREDIR{:02d}: {:#08x}{:08x} {:s}".format(
             0x10 + (redir * 2),
-            redir, 
+            redir,
             redir_val_hi,
             redir_val_lo,
             GetApicFields(redir_val_lo))
@@ -270,7 +270,7 @@ def LapicRead32(cmd_args=None):
     if not IsArchX86_64():
         print "lapic_read32 not supported on this architecture."
         return
-    
+
     lcpu = xnudefines.lcpu_self
     if len(cmd_args) > 1:
         lcpu = ArgumentStringToInt(cmd_args[1])

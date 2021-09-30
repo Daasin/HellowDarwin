@@ -171,7 +171,7 @@ def GetSchedClutchBucketSummary(clutch_bucket):
     pending_delta = kern.GetNanotimeFromAbstime(GetRecentTimestamp() - clutch_bucket.scb_group.scbg_pending_data.scct_timestamp) / 1000
     if (int)(clutch_bucket.scb_group.scbg_pending_data.scct_timestamp) == 18446744073709551615:
         pending_delta = 0
-    return "0x{:<16x} | {:>20d} | {:>20d} | {:>10d} | {:>10d}".format(clutch_bucket.scb_group.scbg_clutch.sc_tg, pending_delta, clutch_bucket.scb_group.scbg_interactivity_data.scct_count, tg_boost, SchedPriorityStableQueueRootPri(clutch_bucket.scb_thread_runq, 'struct thread', 'th_clutch_runq_link')) 
+    return "0x{:<16x} | {:>20d} | {:>20d} | {:>10d} | {:>10d}".format(clutch_bucket.scb_group.scbg_clutch.sc_tg, pending_delta, clutch_bucket.scb_group.scbg_interactivity_data.scct_count, tg_boost, SchedPriorityStableQueueRootPri(clutch_bucket.scb_thread_runq, 'struct thread', 'th_clutch_runq_link'))
 
 def ShowSchedClutchForPset(pset):
     root_clutch = pset.pset_clutch_root
@@ -203,7 +203,7 @@ def ShowSchedClutchForPset(pset):
                     thread_name = GetThreadName(thread)[-24:]
                     if len(thread_name) == 0:
                         thread_name = "<unnamed thread>"
-                    print "{:>10s} | {:>20s} | {:>30s} | {:<25s} | 0x{:<16x} | {:>10d} | {:>10s} | {:>15s} | ".format("*", "*", "*", thread_name, thread, thread.base_pri, "*", "*") 
+                    print "{:>10s} | {:>20s} | {:>30s} | {:<25s} | 0x{:<16x} | {:>10d} | {:>10s} | {:>15s} | ".format("*", "*", "*", thread_name, thread, thread.base_pri, "*", "*")
         print "-" * 300
         root_bucket = root_clutch.scr_bound_buckets[i]
         root_bucket_deadline = 0
@@ -292,7 +292,7 @@ def SchedClutchBucketDetails(clutch_bucket):
     print "{:<30s} : 0x{:<16x}".format("Thread Group", clutch_bucket.scb_group.scbg_clutch.sc_tg)
     print "{:<30s} : {:6d} (inherited from clutch bucket group)".format("Interactivity Score", clutch_bucket.scb_group.scbg_interactivity_data.scct_count)
     print "{:<30s} : {:6d} (inherited from clutch bucket group)".format("Last Timeshare Update Tick", clutch_bucket.scb_group.scbg_timeshare_tick)
-    print "{:<30s} : {:6d} (inherited from clutch bucket group)".format("Priority Shift", clutch_bucket.scb_group.scbg_pri_shift) 
+    print "{:<30s} : {:6d} (inherited from clutch bucket group)".format("Priority Shift", clutch_bucket.scb_group.scbg_pri_shift)
     print "\n"
     runq = clutch_bucket.scb_clutchpri_prioq
     thread_list = []
@@ -328,15 +328,15 @@ def ShowAbstimeToNanoTime(cmd_args=[]):
         raise ArgumentError("Invalid argument")
     timedata = ArgumentStringToInt(cmd_args[0])
     ns = kern.GetNanotimeFromAbstime(timedata)
-    us = float(ns) / 1000 
-    ms = us / 1000 
-    s = ms / 1000 
-    
+    us = float(ns) / 1000
+    ms = us / 1000
+    s = ms / 1000
+
     if s > 60 :
         m = s / 60
         h = m / 60
         d = h / 24
-        
+
         print "{:d} ns, {:f} us, {:f} ms, {:f} s, {:f} m, {:f} h, {:f} d".format(ns, us, ms, s, m, h, d)
     else:
         print "{:d} ns, {:f} us, {:f} ms, {:f} s".format(ns, us, ms, s)
@@ -733,7 +733,7 @@ def ShowScheduler(cmd_args=None):
         share_bg_count = run_buckets[GetEnumValue('sched_bucket_t::TH_BUCKET_SHARE_BG')]
         print "Processors: {g.processor_avail_count:d} Runnable threads: {:d} Fixpri threads: {:d}\n".format(run_count, fixpri_count, g=kern.globals)
         print "FG Timeshare threads: {:d} DF Timeshare threads: {:d} UT Timeshare threads: {:d} BG Timeshare threads: {:d}\n".format(share_fg_count, share_df_count, share_ut_count, share_bg_count)
-    
+
     processor_offline     = GetEnumValue('processor_state_t::PROCESSOR_OFF_LINE')
     processor_idle        = GetEnumValue('processor_state_t::PROCESSOR_IDLE')
     processor_dispatching = GetEnumValue('processor_state_t::PROCESSOR_DISPATCHING')
@@ -781,7 +781,7 @@ def ShowScheduler(cmd_args=None):
                         print "Group {: <#012x} Task {: <#012x}\n".format(unsigned(group), unsigned(task))
                         ShowRunQSummary(group.runq)
             print " \n"
-            
+
             processor_array = kern.globals.processor_array
 
             print "Active Processors:\n"

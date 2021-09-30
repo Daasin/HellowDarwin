@@ -28,7 +28,7 @@ def GetMemMappedPciCfgAddrFromRegistry():
 @static_var('kgm_pci_cfg_base', -1)
 def GetMemMappedPciCfgAddrBase():
     """ Returns the base address of the memory mapped PCI config space. The address
-        is retrieved once from the registry, and is remembered for all subsequent 
+        is retrieved once from the registry, and is remembered for all subsequent
         calls to this function
         Returns:
             int base address of memory mapped PCI config space
@@ -80,10 +80,10 @@ def ShowPciCfgBytes(bus, dev, func, offset):
     """
     # Print mem-mapped address at beginning of each 16-byte line
     phys_addr = MakeMemMappedPciCfgAddr(bus, dev, func, offset)
-    read_vals = [DoPciCfgRead(32, bus, dev, func, offset + byte) 
+    read_vals = [DoPciCfgRead(32, bus, dev, func, offset + byte)
                     for byte in range(0, 16, 4)]
     # It would be nicer to have a shorter format that we could loop
-    # over, but each call to print results in a newline which 
+    # over, but each call to print results in a newline which
     # would prevent us from printing all 16 bytes on one line.
     bytes_fmt = "{:08x}:" + "{:02x} " * 16
     print bytes_fmt.format(
@@ -165,7 +165,7 @@ def PciCfgRead(cmd_args=None):
     if cmd_args == None or len(cmd_args) < 5:
         print PciCfgRead.__doc__
         return
-    
+
     bits = ArgumentStringToInt(cmd_args[0])
     bus  = ArgumentStringToInt(cmd_args[1])
     dev  = ArgumentStringToInt(cmd_args[2])
@@ -261,5 +261,5 @@ def PciCfgDumpAll(cmd_args=None):
     else:
         print PciCfgDumpAll.__doc__
         return
-    
+
     DoPciCfgScan(max_bus, True)

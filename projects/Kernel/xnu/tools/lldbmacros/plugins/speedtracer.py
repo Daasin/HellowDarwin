@@ -8,7 +8,7 @@ def plugin_init(kernel_target, config, lldb_obj, isConnected):
     kern_version = str(kernel_target.version)
 
 def plugin_execute(command_name, result_output):
-    """ The xnu framework will call this function with output of a command. 
+    """ The xnu framework will call this function with output of a command.
         The options for returning are as follows
         returns:  (status, outstr, further_cmds)
            status: Boolean - specifying whether plugin execution succeeded(True) or failed. If failed then xnu will stop doing any further work with this command.
@@ -37,9 +37,9 @@ def plugin_execute(command_name, result_output):
         else:
             outstr += json.dumps(j)
     except HTTPError as e:
-        outstr += "speedtracer replied with\n" + str(e.info())     
+        outstr += "speedtracer replied with\n" + str(e.info())
         status = False
- 
+
     return (status, outstr, further_cmds)
 
 def plugin_cleanup():

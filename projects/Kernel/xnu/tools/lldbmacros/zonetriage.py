@@ -1,18 +1,18 @@
 """
     Triage Macros for zone related panics
-    
-    Supported panic strings from xnu/osfmk/kern/zalloc.c: 
+
+    Supported panic strings from xnu/osfmk/kern/zalloc.c:
         "a freed zone element has been modified in zone %s: expected %p but found %p, bits changed %p, at offset %d of %d in element %p, cookies %p %p" and
         "zalloc: zone map exhausted while allocating from zone %s, likely due to memory leak in zone %s (%lu total bytes, %d elements allocated)"
     These macros are dependant on the above panic strings. If the strings are modified in any way, this script must be updated to reflect the change.
-    
+
     To support more zone panic strings:
-        1.  Add the panic string regex to the globals and include in the named capture group 'zone' (the zone to be 
+        1.  Add the panic string regex to the globals and include in the named capture group 'zone' (the zone to be
             logged) as well as any other info necessary to parse out of the panic string.
         2.  Add a check for the panic string regex in ZoneTriage(), which then calls into the function you create.
-        3.  Add a check for the panic string regex in CheckZoneBootArgs() which sets the variable panic_string_regex to your 
+        3.  Add a check for the panic string regex in CheckZoneBootArgs() which sets the variable panic_string_regex to your
             panic string regex if found.
-        4.  Create a function that can be called either through the zonetriage macro ZoneTriage() or using its own macro. 
+        4.  Create a function that can be called either through the zonetriage macro ZoneTriage() or using its own macro.
             This function should handle all lldb commands you want to run for this type of zone panic.
 """
 from xnu import *
@@ -57,7 +57,7 @@ def ZoneTriageFreedElement(cmd_args=None):
         except:
             return
     CheckZoneBootArgs()
-    ## Run showzonesbeinglogged. 
+    ## Run showzonesbeinglogged.
     print "(lldb) zstack_showzonesbeinglogged\n%s\n" % lldb_run_command("zstack_showzonesbeinglogged")
     ## Capture zone and element from panic string.
     values = re.search(zone_element_modified, panic_string)
@@ -78,7 +78,7 @@ def ZoneTriageMemoryLeak(cmd_args=None):
     """
     global kern
     CheckZoneBootArgs()
-    ## Run showzonesbeinglogged. 
+    ## Run showzonesbeinglogged.
     print "(lldb) zstack_showzonesbeinglogged\n%s\n" % lldb_run_command("zstack_showzonesbeinglogged")
     for zval in kern.zones:
         if zval.zlog_btlog:

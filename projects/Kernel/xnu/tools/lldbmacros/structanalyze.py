@@ -5,7 +5,7 @@ _UnionStructClass = [ lldb.eTypeClassStruct, lldb.eTypeClassClass, lldb.eTypeCla
 
 def _get_offset_formatter(ctx, fmt_hex, fmt_dec):
     """ Returns a formatter of struct member offsets and sizes.
-    
+
     params:
         ctx - configuration context
         fmt_hex - hexadecimal format
@@ -23,7 +23,7 @@ def _get_offset_formatter(ctx, fmt_hex, fmt_dec):
 
 def _get_num_formatter(ctx, fmt_hex, fmt_dec):
     """ Returns a number formatter.
-    
+
     params:
         ctx - configuration context
         fmt_hex - hexadecimal format
@@ -41,7 +41,7 @@ def _get_num_formatter(ctx, fmt_hex, fmt_dec):
 
 def _showStructPacking(ctx, symbol, begin_offset=0, symsize=0, typedef=None, outerSize=0, memberName=None):
     """ Recursively parse the field members of structure.
-        
+
         params :
             ctx - context containing configuration settings and the output formatter (standard.py) symbol (lldb.SBType) reference to symbol in binary
         returns:
@@ -191,10 +191,10 @@ def showStructInfo(cmd_args=None, cmd_options={}, O=None):
 
         Usage: showstructpacking [-X] <type name>
             -X : prints struct members offsets and sizes in a hexadecimal format (decimal is default)
-    
+
         The format is:
             <offset>, [<size_of_member>] (<type>) <name>
-        
+
         Example:
             (lldb) showstructpacking pollfd
                 0,[   8] struct pollfd {

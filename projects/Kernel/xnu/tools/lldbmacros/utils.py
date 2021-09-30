@@ -1,7 +1,7 @@
 #General Utility functions for debugging or introspection
 
 """ Please make sure you read the README file COMPLETELY BEFORE reading anything below.
-    It is very critical that you read coding guidelines in Section E in README file. 
+    It is very critical that you read coding guidelines in Section E in README file.
 """
 import sys, re, time, getopt, shlex, os, time
 import lldb
@@ -10,7 +10,7 @@ from core.cvalue import *
 from core.configuration import *
 from core.lazytarget import *
 
-#DONOTTOUCHME: exclusive use for lldb_run_command only. 
+#DONOTTOUCHME: exclusive use for lldb_run_command only.
 lldb_run_command_state = {'active':False}
 
 def lldb_run_command(cmdstring):
@@ -68,11 +68,11 @@ def GetConnectionProtocol():
     return retval
 
 def SBValueToPointer(sbval):
-    """ Helper function for getting pointer value from an object of pointer type. 
+    """ Helper function for getting pointer value from an object of pointer type.
         ex. void *astring = 0x12345
         use SBValueToPointer(astring_val) to get 0x12345
         params: sbval - value object of type '<type> *'
-        returns: int - pointer value as an int. 
+        returns: int - pointer value as an int.
     """
     if type(sbval) == core.value:
         sbval = sbval.GetSBValue()
@@ -95,7 +95,7 @@ def ArgumentStringToInt(arg_string):
         return int(arg_string)
 
 def GetLongestMatchOption(searchstr, options=[], ignore_case=True):
-    """ Get longest matched string from set of options. 
+    """ Get longest matched string from set of options.
         params:
             searchstr : string of chars to be matched
             options : array of strings that are to be matched
@@ -130,7 +130,7 @@ def GetType(target_type):
     """
     return gettype(target_type)
 
-    
+
 def Cast(obj, target_type):
     """ Type cast an object to another C type.
         params:
@@ -178,17 +178,17 @@ class Logger():
     def __init__(self, log_file_path="/tmp/xnu.log"):
         self.log_file_handle = open(log_file_path, "w+")
         self.redirect_to_stdout = False
-        
+
     def log_debug(self, *args):
         current_timestamp = time.time()
         debug_line_str = "DEBUG:" + str(current_timestamp) + ":"
         for arg in args:
             debug_line_str += " " + str(arg).replace("\n", " ") + ", "
-        
+
         self.log_file_handle.write(debug_line_str + "\n")
         if self.redirect_to_stdout :
             print debug_line_str
-    
+
     def write(self, line):
         self.log_debug(line)
 
@@ -209,7 +209,7 @@ def sizeof_fmt(num, unit_str='B'):
     return "%3.1f%s%s" % (num, 'P', unit_str)
 
 def WriteStringToMemoryAddress(stringval, addr):
-    """ write a null terminated string to address. 
+    """ write a null terminated string to address.
         params:
             stringval: str- string to be written to memory. a '\0' will be added at the end
             addr : int - address where data is to be written
@@ -239,10 +239,10 @@ def WriteInt64ToMemoryAddress(intval, addr):
     numbytes = LazyTarget.GetProcess().WriteMemory(addr,sdata, serr)
     if numbytes == 8 and serr.Success():
         return True
-    return False 
+    return False
 
 def WritePtrDataToMemoryAddress(intval, addr):
-    """ Write data to pointer size memory. 
+    """ Write data to pointer size memory.
         This is equivalent of doing *(&((struct pmap *)addr)) = intval
         It will identify 32/64 bit kernel and write memory accordingly.
         params:
@@ -270,7 +270,7 @@ def WriteInt32ToMemoryAddress(intval, addr):
     numbytes = LazyTarget.GetProcess().WriteMemory(addr,sdata, serr)
     if numbytes == 4 and serr.Success():
         return True
-    return False 
+    return False
 
 def WriteInt16ToMemoryAddress(intval, addr):
     """ write a 16 bit integer at an address.
@@ -286,7 +286,7 @@ def WriteInt16ToMemoryAddress(intval, addr):
     numbytes = LazyTarget.GetProcess().WriteMemory(addr,sdata, serr)
     if numbytes == 2 and serr.Success():
         return True
-    return False 
+    return False
 
 def WriteInt8ToMemoryAddress(intval, addr):
     """ write a 8 bit integer at an address.
@@ -302,7 +302,7 @@ def WriteInt8ToMemoryAddress(intval, addr):
     numbytes = LazyTarget.GetProcess().WriteMemory(addr,sdata, serr)
     if numbytes == 1 and serr.Success():
         return True
-    return False 
+    return False
 
 _enum_cache = {}
 def GetEnumValue(name):
@@ -339,7 +339,7 @@ def ResolveFSPath(path):
 _dsymlist = {}
 uuid_regex = re.compile("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}",re.IGNORECASE|re.DOTALL)
 def addDSYM(uuid, info):
-    """ add a module by dsym into the target modules. 
+    """ add a module by dsym into the target modules.
         params: uuid - str - uuid string eg. 4DD2344C0-4A81-3EAB-BDCF-FEAFED9EB73E
                 info - dict - info dictionary passed from dsymForUUID
     """
@@ -399,10 +399,10 @@ def RunShellCommand(command):
         return (exit_code, output_str, '')
 
 def dsymForUUID(uuid):
-    """ Get dsym informaiton by calling dsymForUUID 
+    """ Get dsym informaiton by calling dsymForUUID
         params: uuid - str - uuid string from executable. eg. 4DD2344C0-4A81-3EAB-BDCF-FEAFED9EB73E
         returns:
-            {} - a dictionary holding dsym information printed by dsymForUUID. 
+            {} - a dictionary holding dsym information printed by dsymForUUID.
             None - if failed to find information
     """
     import subprocess

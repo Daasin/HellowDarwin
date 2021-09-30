@@ -160,7 +160,7 @@ def IterateQueue(queue_head, element_ptr_type, element_field_name, backwards=Fal
         queue_head_addr = queue_head.GetValueAsUnsigned()
     else:
         queue_head_addr = queue_head.GetAddress().GetLoadAddress(LazyTarget.GetTarget())
-        
+
     def unpack_ptr_and_recast(v):
         if unpack_ptr_fn is None:
             return v

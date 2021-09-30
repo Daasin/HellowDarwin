@@ -8,14 +8,14 @@ def GetKDPPacketHeaderInt(request=0, is_reply=False, seq=0, length=0, key=0):
     """ create a 64 bit number that could be saved as pkt_hdr_t
         params:
             request:int   - 7 bit kdp_req_t request type
-            is_reply:bool - False => request, True => reply 
-            seq: int      - 8  sequence number within session 
-            length: int   - 16 bit length of entire pkt including hdr 
-            key: int      - session key 
+            is_reply:bool - False => request, True => reply
+            seq: int      - 8  sequence number within session
+            length: int   - 16 bit length of entire pkt including hdr
+            key: int      - session key
         returns:
             int - 64 bit number to be saved in memory
     """
-    retval = request 
+    retval = request
     if is_reply:
         retval = 1<<7 |retval
     retval = (seq << 8) | retval
@@ -70,13 +70,13 @@ def KDPDumpInfo(subcmd, file_name="", dest_ip="", router_ip="", port=0):
 def KDPSendCore(cmd_args=None):
     """  Configure kernel to send a coredump to the specified IP
     Syntax: sendcore <IP address> [filename]
-    Configure the kernel to transmit a kernel coredump to a server (kdumpd) 
+    Configure the kernel to transmit a kernel coredump to a server (kdumpd)
     at the specified IP address. This is useful when the remote target has
     not been previously configured to transmit coredumps, and you wish to
     preserve kernel state for later examination. NOTE: You must issue a "continue"
     command after using this macro to trigger the kernel coredump. The kernel
     will resume waiting in the debugger after completion of the coredump. You
-    may disable coredumps by executing the "disablecore" macro. You can 
+    may disable coredumps by executing the "disablecore" macro. You can
     optionally specify the filename to be used for the generated core file.
 
     """
@@ -95,12 +95,12 @@ def KDPSendCore(cmd_args=None):
         print "Something went wrong. Failed to setup the coredump on the target."
         return False
 
-    
+
 @lldb_command('sendsyslog')
 def KDPSendSyslog(cmd_args=None):
     """ Configure kernel to send a system log to the specified IP
         Syntax: sendsyslog <IP address> [filename]
-        Configure the kernel to transmit a kernel system log to a server (kdumpd) 
+        Configure the kernel to transmit a kernel system log to a server (kdumpd)
         at the specified IP address. NOTE: You must issue a "continue"
         command after using this macro to trigger the kernel system log. The kernel
         will resume waiting in the debugger after completion. You can optionally
@@ -125,7 +125,7 @@ def KDPSendSyslog(cmd_args=None):
 def KDPSendPaniclog(cmd_args=None):
     """ Configure kernel to send a panic log to the specified IP
         Syntax: sendpaniclog <IP address> [filename]
-        Configure the kernel to transmit a kernel paniclog to a server (kdumpd) 
+        Configure the kernel to transmit a kernel paniclog to a server (kdumpd)
         at the specified IP address. NOTE: You must issue a "continue"
         command after using this macro to trigger the kernel panic log. The kernel
         will resume waiting in the debugger after completion. You can optionally
@@ -164,10 +164,10 @@ def KDPDisableCore(cmd_args=None):
 
 @lldb_command('resume_on')
 def KDPResumeON(cmd_args=None):
-    """ The target system will resume when detaching  or exiting from lldb. 
+    """ The target system will resume when detaching  or exiting from lldb.
         This is the default behavior.
     """
-    subcmd = GetEnumValue('kdp_dumpinfo_t::KDP_DUMPINFO_SETINFO') | GetEnumValue('kdp_dumpinfo_t::KDP_DUMPINFO_RESUME') 
+    subcmd = GetEnumValue('kdp_dumpinfo_t::KDP_DUMPINFO_SETINFO') | GetEnumValue('kdp_dumpinfo_t::KDP_DUMPINFO_RESUME')
     retval = KDPDumpInfo(subcmd)
     if retval :
         print "Target system will resume on detaching from lldb."
@@ -177,9 +177,9 @@ def KDPResumeON(cmd_args=None):
 
 @lldb_command('resume_off')
 def KDPResumeOFF(cmd_args=None):
-    """ The target system will not resume when detaching  or exiting from lldb. 
+    """ The target system will not resume when detaching  or exiting from lldb.
     """
-    subcmd = GetEnumValue('kdp_dumpinfo_t::KDP_DUMPINFO_SETINFO') | GetEnumValue('kdp_dumpinfo_t::KDP_DUMPINFO_NORESUME') 
+    subcmd = GetEnumValue('kdp_dumpinfo_t::KDP_DUMPINFO_SETINFO') | GetEnumValue('kdp_dumpinfo_t::KDP_DUMPINFO_NORESUME')
     retval = KDPDumpInfo(subcmd)
     if retval :
         print "Target system will not resume on detaching from lldb."
@@ -228,7 +228,7 @@ def KDPGetDumpInfo(cmd_args=None):
 
 @lldb_command('kdp-reenter')
 def KDPReenter(cmd_args=None):
-    """ Schedules reentry into the debugger 
+    """ Schedules reentry into the debugger
         after <seconds> seconds, and resumes the target.
         usage: kdp-reenter <seconds>
     """
@@ -264,9 +264,9 @@ def KDPReboot(cmd_args=None):
 
 @lldb_command('setdumpinfo')
 def KDPSetDumpInfo(cmd_args=None):
-    """ Configure the current remote dump settings. 
+    """ Configure the current remote dump settings.
         Specify "" if you want to use the defaults (filename) or previously configured
-        settings (ip/router). Specify 0 for the port if you wish to 
+        settings (ip/router). Specify 0 for the port if you wish to
         use the previously configured/default setting for that.
         Syntax: setdumpinfo <filename> <ip> <router> <port>
     """
@@ -291,7 +291,7 @@ def KDPMode(cmd_args=None):
     Change KDP mode between software hosted and hardware probe.
     When lldb is connected to a KDP server backed by a hardware debug tool
     setting this to 'hwprobe' enables physical memory access.
-    
+
     swhosted: LLDB is connected to the target using a serial or socket connection.
     hwprobe: LLDB is connected to the target using a hardware probe.
 

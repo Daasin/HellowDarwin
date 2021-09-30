@@ -187,7 +187,7 @@ def GetMemoryStatusNode(proc_val):
 
     format_string = '{0: >8d} {1: >12d} {2: >12d} {3: #011x} {4: >10d} {5: #011x} {6: >12d} {7: >10d} {8: >13d}'
     out_str += format_string.format(proc_val.p_pid, proc_val.p_memstat_effectivepriority,
-        proc_val.p_memstat_requestedpriority, proc_val.p_memstat_state, proc_val.p_memstat_relaunch_flags, 
+        proc_val.p_memstat_requestedpriority, proc_val.p_memstat_state, proc_val.p_memstat_relaunch_flags,
         proc_val.p_memstat_userdata, phys_mem_footprint, iokit_footprint, phys_footprint)
     if phys_footprint != phys_footprint_spike:
         out_str += "{: >12d}".format(phys_footprint_spike)
@@ -543,7 +543,7 @@ def GetZone(zone_val, marks):
         zone["allocation_ncpu"] = 1
     zone["allocation_count"] = zone["allocation_size"] / zone_val.z_elem_size
     zone["allocation_waste"] = (zone["allocation_size"] % zone_val.z_elem_size) * zone["allocation_ncpu"]
-    
+
     if not zone_val.__getattr__("z_self") :
         zone["destroyed"] = True
     else:
@@ -599,7 +599,7 @@ def GetZoneSummary(zone_val, marks, stats):
     markings=""
     if zone["destroyed"]:
         markings+="I"
-        
+
     for mark in marks:
         if zone[mark[0]]:
             markings += mark[1]
@@ -1276,7 +1276,7 @@ def ShowZtraceHistogram(cmd_args=None):
             ztrace_count += 1
         current_index += 1
     print 'Total traces: {0: <d}'.format(ztrace_count)
-    
+
 #EndMacro: showztracehistogram
 
 #Macro: showzallochistogram
@@ -1692,7 +1692,7 @@ def GetKextSummary(kmod):
     return out_string
 
 @lldb_type_summary(['uuid_t'])
-@header("")  
+@header("")
 def GetUUIDSummary(uuid):
     """ returns a string representation like CA50DA4C-CA10-3246-B8DC-93542489AA26
     """
@@ -1978,7 +1978,7 @@ def AddKextSyms(cmd_args=[], cmd_options={}):
         exec_full_path = ResolveFSPath(exec_path)
         if not os.path.exists(exec_full_path):
             raise ArgumentError("Unable to resolve {:s}".format(exec_path))
-        
+
         if not os.path.isfile(exec_full_path):
             raise ArgumentError("Path is {:s} not a filepath. \nPlease check that path points to executable.\
 \nFor ex. path/to/Symbols/IOUSBFamily.kext/Contents/PlugIns/AppleUSBHub.kext/Contents/MacOS/AppleUSBHub.\
@@ -2131,7 +2131,7 @@ def ShowSystemLog(cmd_args=None):
         if not err.Success() :
             raise ValueError("Failed to read character at offset " + str(i) + ": " + err.GetCString())
         c = chr(cbyte)
-        if c == '\0' :  
+        if c == '\0' :
             continue
         elif c == '\n' :
             print line
@@ -2397,7 +2397,7 @@ def ShowProcLocks(cmd_args=None):
                         out_str += "(null) )\n"
                     else:
                         out_str += "{:s} )\n".format(name)
-                    print out_str  
+                    print out_str
                     print GetVnodeLocksSummary(fg_vnode)
         count = count + 1
     print "\n{0: d} total locks for {1: #018x}".format(seen, proc)
@@ -2729,7 +2729,7 @@ def GetSpinLockSummary(spinlock):
     out_str = "Lock Type\t\t: SPINLOCK\n"
     if kern.arch == "x86_64":
         out_str += "Interlock\t\t: {:#x}\n".format(spinlock.interlock)
-        return out_str 
+        return out_str
 
     lock_data = spinlock.hwlock.lock_data
     if lock_data == 1:
@@ -2748,8 +2748,8 @@ def GetSpinLockSummary(spinlock):
 def ShowLock(cmd_args=None, cmd_options={}):
     """ Show info about a lock - its state and owner thread details
         Usage: showlock <address of a lock>
-        -M : to consider <addr> as lck_mtx_t 
-        -S : to consider <addr> as lck_spin_t 
+        -M : to consider <addr> as lck_mtx_t
+        -S : to consider <addr> as lck_spin_t
     """
     if not cmd_args:
         raise ArgumentError("Please specify the address of the lock whose info you want to view.")
@@ -2816,7 +2816,7 @@ def ShowBooterMemoryMap(cmd_args=None):
         return
 
     out_string = ""
-    
+
     # Memory type map
     memtype_dict = {
             0:  'Reserved',
@@ -2838,9 +2838,9 @@ def ShowBooterMemoryMap(cmd_args=None):
     boot_args = kern.globals.kernelBootArgs
     msize = boot_args.MemoryMapDescriptorSize
     mcount = (boot_args.MemoryMapSize) / unsigned(msize)
-    
+
     out_string += "{0: <12s} {1: <19s} {2: <19s} {3: <19s} {4: <10s}\n".format("Type", "Physical Start", "Number of Pages", "Virtual Start", "Attributes")
-    
+
     i = 0
     while i < mcount:
         mptr = kern.GetValueFromAddress(unsigned(boot_args.MemoryMap) + kern.VM_MIN_KERNEL_ADDRESS + unsigned(i*msize), 'EfiMemoryRange *')
@@ -2855,7 +2855,7 @@ def ShowBooterMemoryMap(cmd_args=None):
         else:
             out_string += "{0: #019x} {1: #019x} {2: #019x} {3: #019x}\n".format(mptr.PhysicalStart, mptr.NumberOfPages, mptr.VirtualStart, mptr.Attribute)
         i = i + 1
-    
+
     print out_string
 #EndMacro: showbootermemorymap
 
@@ -2903,7 +2903,7 @@ def ShowAllPurgeableNonVolatileVmObjects(cmd_args=None):
 
 def ShowPurgeableNonVolatileVmObject(object, idx, queue_len, nonvolatile_total):
     """  Routine to print out a summary a VM object in purgeable_nonvolatile_queue
-        params: 
+        params:
             object - core.value : a object of type 'struct vm_object *'
         returns:
             None
@@ -3005,7 +3005,7 @@ def ShowPurgeableGroup(qhead, volatile_total):
 
 def ShowPurgeableVolatileVmObject(object, idx, volatile_total):
     """  Routine to print out a summary a VM object in a purgeable queue
-        params: 
+        params:
             object - core.value : a object of type 'struct vm_object *'
         returns:
             None
@@ -3078,7 +3078,7 @@ def GetCompressedPagesForObject(obj):
 
 def ShowTaskVMEntries(task, show_pager_info, show_all_shadows):
     """  Routine to print out a summary listing of all the entries in a vm_map
-        params: 
+        params:
             task - core.value : a object of type 'task *'
         returns:
             None
@@ -4706,7 +4706,7 @@ def ShowVMNamedEntry(cmd_args=None):
 
 def showmemoryentry(entry, idx=0, queue_len=0):
     """  Routine to print out a summary a VM memory entry
-        params: 
+        params:
             entry - core.value : a object of type 'struct vm_named_entry *'
         returns:
             None

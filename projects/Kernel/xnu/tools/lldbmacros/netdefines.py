@@ -47,8 +47,8 @@ dlil_if_flags_strings = ["DLIF_INUSE",
                         ]
 
 if_capenable_strings = ["RXCSUM",
-                        "TXCSUM", 
-                        "VLAN_MTU", 
+                        "TXCSUM",
+                        "VLAN_MTU",
                         "VLAN_HWTAGGING",
                         "JUMBO_MTU",
                         "TSO4",

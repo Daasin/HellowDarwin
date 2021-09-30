@@ -189,7 +189,7 @@ class Armv8_RegisterSet(object):
     def GetRegisterInfo(cls, regnum):
         if regnum < 0 or regnum > len(cls.register_info['registers']):
             return ''
-            
+
         reginfo = cls.register_info['registers'][regnum]
         retval = ''
         for i in reginfo.keys():
@@ -230,12 +230,12 @@ class Armv7_RegisterSet(object):
     def __init__(self):
         self.switch_context_address = osplugin_target_obj.FindSymbols('load_reg')[0].GetSymbol().GetStartAddress().GetLoadAddress(osplugin_target_obj) + 8
         self.ResetRegisterValues()
-    
+
     @classmethod
     def GetRegisterInfo(cls, regnum):
         if regnum < 0 or regnum > len(cls.register_info['registers']):
             return ''
-            
+
         reginfo = cls.register_info['registers'][regnum]
         retval = ''
         for i in reginfo.keys():
@@ -381,12 +381,12 @@ class I386_RegisterSet(object):
 
     def __init__(self):
         self.ResetRegisterValues()
-    
+
     @classmethod
     def GetRegisterInfo(cls, regnum):
         if regnum < 0 or regnum > len(cls.register_info['registers']):
             return ''
-            
+
         reginfo = cls.register_info['registers'][regnum]
         retval = ''
         for i in reginfo.keys():
@@ -730,7 +730,7 @@ class OperatingSystemPlugIn(object):
                          }
             self.thread_cache[tid] = thread_obj
             return thread_obj
-        
+
         th_ptr = context
         th = self.version.CreateValueFromExpression(str(th_ptr),'(struct thread *)' + str(th_ptr))
         thread_id = th.GetChildMemberWithName('thread_id').GetValueAsUnsigned()
@@ -834,7 +834,7 @@ class OperatingSystemPlugIn(object):
                 self.thread_cache = {}
                 self.current_session_id = GetUniqueSessionID(self.process)
             if tid in self.thread_cache.keys():
-                
+
                 #Check if the thread is a fake one. Then create and return registers directly
                 if self.thread_cache[tid]['name'].find('switchtoregs') == 0:
                     savedstateobj = self.version.CreateValueFromExpression(None, '(uintptr_t *) ' + str(self.thread_cache[tid]['ptr']))
@@ -842,7 +842,7 @@ class OperatingSystemPlugIn(object):
                     return regs.GetPackedRegisterState()
 
                 thobj = self.version.CreateValueFromExpression(self.thread_cache[tid]['name'], '(struct thread *)' + str(self.thread_cache[tid]['ptr']))
-            
+
             if thobj == None :
                 print "FATAL ERROR: Could not find thread with id %d" % tid
                 regs.ResetRegisterValues()

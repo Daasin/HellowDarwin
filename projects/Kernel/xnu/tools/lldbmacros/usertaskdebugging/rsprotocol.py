@@ -13,7 +13,7 @@ class Message(object):
     def getData(self):
         #TODO need to parse data and unescape
         return self.data
-    
+
     def getRSPByteData(self):
         retval = ''.join(['$',self.data,'#'])
         checksum = 0
@@ -34,7 +34,7 @@ class Message(object):
         except ValueError as e:
             logging.error('Invalid bytedata considered as message %s' % bytedata)
             return None
-                
+
         #validate the data
         if data_begin + 1 >= data_end:
             logging.debug("empty message %s"%bytedata)
@@ -50,7 +50,7 @@ class ProtocolAcknowledgement(Message):
     def __init__(self, ack_str):
         super(ProtocolAcknowledgement, self).__init__(ack_str)
         self.data = ack_str
-    
+
     def getRSPByteData(self):
         return self.data
 

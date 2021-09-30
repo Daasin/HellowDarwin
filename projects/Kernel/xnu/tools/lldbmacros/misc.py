@@ -74,8 +74,8 @@ def showMCAstate(cmd_args=None):
                 print val.format(i,
                     bank.mca_mci_ctl,
                     bank.mca_mci_status.u64,
-                    bank.mca_mci_addr,     
-                    bank.mca_mci_misc)     
+                    bank.mca_mci_addr,
+                    bank.mca_mci_misc)
         print 'register state:'
         reg = cd.cpu_desc_index.cdi_ktss.ist1 - sizeof('x86_saved_state_t')
         print lldb_run_command('p/x *(x86_saved_state_t *) ' + hex(reg))
@@ -296,7 +296,7 @@ def showTimerWakeupStats(cmd_args=None):
 def ShowRunningTimers(cmd_args=None):
     """
     Print the state of all running timers.
-    
+
     Usage: showrunningtimers
     """
     pset = addressof(kern.globals.pset0)
@@ -333,12 +333,12 @@ def DoReadMsr64(msr_address, lcpu):
     if not WriteInt32ToMemoryAddress(0, input_address):
         print "DoReadMsr64() failed to write 0 to input_address"
         return result
-    
+
     kdp_pkt_size = GetType('kdp_readmsr64_req_t').GetByteSize()
     if not WriteInt32ToMemoryAddress(kdp_pkt_size, len_address):
         print "DoReadMsr64() failed to write kdp_pkt_size"
         return result
-    
+
     kgm_pkt = kern.GetValueFromAddress(data_address, 'kdp_readmsr64_req_t *')
     header_value = GetKDPPacketHeaderInt(
         request=GetEnumValue('kdp_req_t::KDP_READMSR64'),
@@ -367,7 +367,7 @@ def DoReadMsr64(msr_address, lcpu):
 
 def DoWriteMsr64(msr_address, lcpu, data):
     """ Write a 64-bit MSR
-        Params: 
+        Params:
             msr_address: int - MSR index to write to
             lcpu: int - CPU identifier
             data: int - value to write
@@ -384,17 +384,17 @@ def DoWriteMsr64(msr_address, lcpu, data):
     if not WriteInt32ToMemoryAddress(0, input_address):
         print "DoWriteMsr64() failed to write 0 to input_address"
         return False
-    
+
     kdp_pkt_size = GetType('kdp_writemsr64_req_t').GetByteSize()
     if not WriteInt32ToMemoryAddress(kdp_pkt_size, len_address):
         print "DoWriteMsr64() failed to kdp_pkt_size"
         return False
-    
+
     kgm_pkt = kern.GetValueFromAddress(data_address, 'kdp_writemsr64_req_t *')
     header_value = GetKDPPacketHeaderInt(
         request=GetEnumValue('kdp_req_t::KDP_WRITEMSR64'),
         length=kdp_pkt_size)
-    
+
     if not WriteInt64ToMemoryAddress(header_value, int(addressof(kgm_pkt.hdr))):
         print "DoWriteMsr64() failed to write header_value"
         return False
@@ -416,7 +416,7 @@ def DoWriteMsr64(msr_address, lcpu, data):
     if not result_pkt.error == 0:
         print "DoWriteMsr64() error received in reply packet"
         return False
-    
+
     return True
 
 @lldb_command('readmsr64')
@@ -427,7 +427,7 @@ def ReadMsr64(cmd_args=None):
     if cmd_args == None or len(cmd_args) < 1:
         print ReadMsr64.__doc__
         return
-    
+
     msr_address = ArgumentStringToInt(cmd_args[0])
     if len(cmd_args) > 1:
         lcpu = ArgumentStringToInt(cmd_args[1])
@@ -459,7 +459,7 @@ def GetKernelDebugBufferEntry(kdbg_entry):
     """ Extract the information from given kernel debug buffer entry and return the summary
         params:
             kdebug_entry - kd_buf - address of kernel debug buffer entry
-        returns: 
+        returns:
             str - formatted output information of kd_buf entry
     """
     out_str = ""
@@ -470,7 +470,7 @@ def GetKernelDebugBufferEntry(kdbg_entry):
     kdebug_arg2 = kdebug_entry.arg2
     kdebug_arg3 = kdebug_entry.arg3
     kdebug_arg4 = kdebug_entry.arg4
-    
+
     if kern.arch == 'x86_64' or kern.arch.startswith('arm64'):
         kdebug_cpu   = kdebug_entry.cpuid
         ts_hi        = (kdebug_entry.timestamp >> 32) & 0xFFFFFFFF
@@ -479,12 +479,12 @@ def GetKernelDebugBufferEntry(kdbg_entry):
         kdebug_cpu   = (kdebug_entry.timestamp >> 56)
         ts_hi        = (kdebug_entry.timestamp >> 32) & 0x00FFFFFF
         ts_lo        = kdebug_entry.timestamp & 0xFFFFFFFF
-    
+
     kdebug_class    = (debugid >> 24) & 0x000FF
     kdebug_subclass = (debugid >> 16) & 0x000FF
     kdebug_code     = (debugid >>  2) & 0x03FFF
     kdebug_qual     = (debugid) & 0x00003
-    
+
     if kdebug_qual == 0:
         kdebug_qual = '-'
     elif kdebug_qual == 1:
@@ -497,7 +497,7 @@ def GetKernelDebugBufferEntry(kdbg_entry):
     # preamble and qual
     out_str += "{:<#20x} {:>6d} {:>#12x} ".format(kdebug_entry, kdebug_cpu, kdebug_entry.arg5)
     out_str += " {:#010x}{:08x} {:>6s} ".format(ts_hi, ts_lo, kdebug_qual)
-    
+
     # class
     kdbg_class = ""
     if kdebug_class == 1:
@@ -564,7 +564,7 @@ def GetKernelDebugBufferEntry(kdbg_entry):
         kdbg_class = "MIG "
     else:
         out_str += "{:^#10x} ".format(kdebug_class)
-    
+
     if kdbg_class:
         out_str += "{:^10s} ".format(kdbg_class)
 
@@ -590,14 +590,14 @@ def ShowKernelDebugBufferCPU(cmd_args=None):
     """
     if cmd_args == None or len(cmd_args) < 2:
         raise ArgumentError("Invalid arguments passed.")
-    
+
     out_str = ""
     kdbg_str = ""
     cpu_number = ArgumentStringToInt(cmd_args[0])
     entry_count = ArgumentStringToInt(cmd_args[1])
     debugentriesfound = 0
     #  Check if KDBG_BFINIT (0x80000000) is set in kdebug_flags
-    if (kern.globals.kd_ctrl_page.kdebug_flags & 0x80000000):   
+    if (kern.globals.kd_ctrl_page.kdebug_flags & 0x80000000):
         out_str += ShowKernelDebugBufferCPU.header + "\n"
         if entry_count == 0:
             out_str += "<count> is 0, dumping 50 entries\n"
@@ -622,7 +622,7 @@ def ShowKernelDebugBufferCPU(cmd_args=None):
                 kdsp = kdsp_actual.kds_next
     else:
         kdbg_str += "Trace buffer not enabled for CPU {:d}\n".format(cpu_number)
-    
+
     if kdbg_str:
         out_str += kdbg_str
         print out_str
@@ -634,7 +634,7 @@ def ShowKernelDebugBuffer(cmd_args=None):
     """
     if cmd_args == None or len(cmd_args) < 1:
         raise ArgumentError("Invalid arguments passed.")
-    
+
     #  Check if KDBG_BFINIT (0x80000000) is set in kdebug_flags
     if (kern.globals.kd_ctrl_page.kdebug_flags & 0x80000000):
         entrycount = ArgumentStringToInt(cmd_args[0])
@@ -664,7 +664,7 @@ def DumpRawTraceFile(cmd_args=[], cmd_options={}):
         cf. kdbg_read()\bsd/kern/kdebug.c
     """
 
-    #  Check if KDBG_BFINIT (0x80000000) is set in kdebug_flags 
+    #  Check if KDBG_BFINIT (0x80000000) is set in kdebug_flags
     if (kern.globals.kd_ctrl_page.kdebug_flags & xnudefines.KDBG_BFINIT) == 0 :
         print "Trace buffer not enabled\n"
         return
@@ -847,7 +847,7 @@ def DumpRawTraceFile(cmd_args=[], cmd_options={}):
                 if (t > barrier_max) and (barrier_max > 0) :
                     # Need to flush IOPs again before we
                     # can sort any more data from the
-                    # buffers.  
+                    # buffers.
                     out_of_events = True
                     break
 
@@ -891,7 +891,7 @@ def DumpRawTraceFile(cmd_args=[], cmd_options={}):
             # Concatenate event into buffer
             # XXX condition here is on __LP64__
             if lp64 :
-                tempbuf += struct.pack('QQQQQQIIQ', 
+                tempbuf += struct.pack('QQQQQQIIQ',
                         unsigned(e.timestamp),
                         unsigned(e.arg1),
                         unsigned(e.arg2),

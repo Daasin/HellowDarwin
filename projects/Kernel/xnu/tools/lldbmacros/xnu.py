@@ -1057,12 +1057,12 @@ def Trace_cmd(cmd_args=[], cmd_options={}, headerString=lambda:"", entryString=l
         raise ArgumentError("Invalid output count `%s'" % cmd_options['-N']);
     except KeyError:
         limit_output_count = None
-        
+
     reverse_sort = '-R' in cmd_options
     backtraces = '-B' in cmd_options
 
     # entries will be a list of 3-tuples, each holding the CPU on which the iotrace entry was collected,
-    # the original ring index, and the iotrace entry. 
+    # the original ring index, and the iotrace entry.
     entries = []
     for x in chosen_cpus:
         ring_slice = [(x, y, ring[x][y]) for y in range(entries_per_cpu)]
@@ -1169,7 +1169,7 @@ def TrapTrace_cmd(cmd_args=[], cmd_options={}):
 
     Trace_cmd(cmd_args, cmd_options, hdrString, entryString, kern.globals.traptrace_ring,
         kern.globals.traptrace_entries_per_cpu, MAX_TRAPTRACE_BACKTRACES)
-                
+
 
 @lldb_command('showsysctls', 'P:')
 def ShowSysctls(cmd_args=[], cmd_options={}):

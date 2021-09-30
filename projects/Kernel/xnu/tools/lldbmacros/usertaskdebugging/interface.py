@@ -46,7 +46,7 @@ class Interface(object):
             pass
 
         return r_bytes
-    
+
     def write(self, bytes):
         if not self.isblocking:
             self.connection.setblocking(1)
