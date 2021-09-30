@@ -179,7 +179,7 @@ class CommandOutput(object):
         print(self.format("{cmd.cmd_name}: {VT.Red}"+s+"{VT.Default}", cmd=self, *args, **kwargs))
 
     def write(self, s):
-        """ Handler for all commands output. By default just print(to stdout """)
+        """ Handler for all commands output. By default just print to stdout """
 
         s = self._buffer + s
 

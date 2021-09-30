@@ -27,7 +27,7 @@ class value(object):
 
     pt = lldb.value(lldb.frame.FindVariable("rectangle_array"))
     print(rectangle_array[12])
-    print(rectangle_array[5].origin.x''')
+    print(rectangle_array[5].origin.x)'''
     def __init__(self, sbvalue):
         #_sbval19k84obscure747 is specifically chosen to be obscure.
         #This avoids conflicts when attributes could mean any field value in code
