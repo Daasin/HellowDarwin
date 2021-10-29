@@ -4,7 +4,7 @@ HellowDarwin* [![Join the chat at https://gitter.im/PureDarwin/](https://img.shi
 
  
 ---
-HellowDarwin* aims to be a rebased fork derived of HelloSystem but onto all Darwin works that are still FOSS-Compatible. Any missing impelementations such as CoreAudio-Related code from Current Works are intended to be ported and brought older from older versions where possible and if not, then ported and brought over from FreeBSD to fill in
+HellowDarwin* aims to be a rebased fork derived of HelloSystem but onto all Darwin works that are still FOSS-Compatible. Any missing impelementations such as CoreAudio-Related code from Current Works are intended to be ported and brought over from older versions where possible and if not, then to be ported and brought over from FreeBSD to fill in
 ---
 
 Note: 
